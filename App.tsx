@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   Menu, 
@@ -31,8 +30,8 @@ import {
 } from './constants';
 import { ContactType } from './types';
 
-// Fallback image in case 'person.png' is missing or fails to load
-const FALLBACK_IMAGE = "person.png";
+// Robust fallback image from a reliable CDN
+const REMOTE_FALLBACK = "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop";
 
 const Toast = ({ message, type, onClose }: { message: string, type: 'success' | 'error', onClose: () => void }) => {
   useEffect(() => {
@@ -128,7 +127,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen selection:bg-blue-100 selection:text-blue-900">
       <Header />
       
       {/* Hero Section */}
@@ -160,7 +159,7 @@ const App: React.FC = () => {
               <div className="relative w-80 h-80 lg:w-[500px] lg:h-[500px] rounded-full overflow-hidden border-[12px] border-white shadow-2xl transition-transform duration-500 hover:scale-[1.02]">
                 <img 
                   src={imgSrc} 
-                  onError={() => setImgSrc(FALLBACK_IMAGE)}
+                  onError={() => setImgSrc(REMOTE_FALLBACK)}
                   alt="Sady Enrique Maureria Ferrada - Consultor Senior" 
                   className="w-full h-full object-cover object-top brightness-105"
                 />
@@ -263,8 +262,88 @@ const App: React.FC = () => {
         </div>
       </section>
 
+      {/* Methodology Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid lg:grid-cols-4 gap-12">
+            {METHODOLOGY.map((step, idx) => (
+              <div key={idx} className="relative group">
+                <div className="bg-slate-50 p-8 rounded-3xl border border-slate-100 group-hover:bg-white group-hover:shadow-xl transition-all">
+                  <div className="text-blue-700 mb-6">{step.icon}</div>
+                  <h4 className="text-lg font-bold mb-3">{step.title}</h4>
+                  <p className="text-slate-500 text-sm leading-relaxed">{step.desc}</p>
+                </div>
+                {idx < METHODOLOGY.length - 1 && (
+                  <div className="hidden lg:block absolute top-1/2 -right-6 translate-x-0 text-slate-200">
+                    <ChevronRight className="w-12 h-12" />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Case Studies Section */}
+      <section id="casos" className="py-24 bg-slate-900 text-white overflow-hidden">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-16">
+            <h2 className="text-4xl font-bold mb-4">Casos de Éxito</h2>
+            <p className="text-slate-400">Impacto medible en proyectos de gran envergadura.</p>
+          </div>
+          <div className="grid lg:grid-cols-3 gap-8">
+            {CASE_STUDIES.map((study) => (
+              <div key={study.id} className="bg-slate-800/50 p-8 rounded-3xl border border-slate-700 hover:border-blue-500 transition-all">
+                <div className="text-blue-400 text-xs font-bold uppercase tracking-widest mb-4">{study.client}</div>
+                <h3 className="text-xl font-bold mb-4">{study.project}</h3>
+                <p className="text-slate-400 text-sm mb-6 leading-relaxed italic">"{study.challenge}"</p>
+                <div className="space-y-3 mb-8">
+                  {study.results.map((res, i) => (
+                    <div key={i} className="flex items-start gap-3">
+                      <CheckCircle2 className="w-4 h-4 text-green-400 mt-1 shrink-0" />
+                      <span className="text-sm text-slate-300">{res}</span>
+                    </div>
+                  ))}
+                </div>
+                <div className="pt-6 border-t border-slate-700 font-bold text-blue-400">{study.roi}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Blog Section */}
+      <section id="blog" className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex justify-between items-end mb-16">
+            <div>
+              <h2 className="text-4xl font-bold mb-4">Pensamiento Estratégico</h2>
+              <p className="text-slate-500">Artículos y guías sobre ingeniería de calidad.</p>
+            </div>
+            <button className="hidden md:flex items-center gap-2 text-blue-700 font-bold hover:underline">
+              Ver todas las publicaciones <ChevronRight className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="grid md:grid-cols-3 gap-10">
+            {BLOG_POSTS.map((post) => (
+              <article key={post.id} className="group cursor-pointer">
+                <div className="relative aspect-[16/10] rounded-2xl overflow-hidden mb-6">
+                  <img src={post.imageUrl} alt={post.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute top-4 left-4 bg-white/90 glass px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-blue-700">
+                    {post.category}
+                  </div>
+                </div>
+                <div className="text-slate-400 text-xs font-medium mb-3">{post.date}</div>
+                <h3 className="text-xl font-bold mb-3 group-hover:text-blue-700 transition-colors">{post.title}</h3>
+                <p className="text-slate-500 text-sm line-clamp-2 leading-relaxed">{post.excerpt}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Contact Section */}
-      <section id="contacto" className="py-24 bg-white">
+      <section id="contacto" className="py-24 bg-slate-50">
         <div className="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-20">
           <div className="space-y-12">
             <div className="space-y-6">
@@ -280,7 +359,7 @@ const App: React.FC = () => {
                 { icon: <MapPin />, label: 'Sede Central', val: 'Santiago, Chile (Alcance Regional)' }
               ].map((item, i) => (
                 <div key={i} className="flex gap-6 items-center group">
-                  <div className="bg-slate-100 p-4 rounded-xl text-slate-600 group-hover:bg-blue-700 group-hover:text-white transition-all duration-300">
+                  <div className="bg-white p-4 rounded-xl text-slate-600 shadow-sm group-hover:bg-blue-700 group-hover:text-white transition-all duration-300">
                     {React.cloneElement(item.icon as React.ReactElement<any>, { className: 'w-6 h-6' })}
                   </div>
                   <div>
@@ -289,6 +368,11 @@ const App: React.FC = () => {
                   </div>
                 </div>
               ))}
+            </div>
+            <div className="flex gap-4 pt-6">
+               <a href="#" className="p-3 bg-white rounded-full text-slate-400 hover:text-blue-700 shadow-sm hover:shadow-md transition-all">
+                 <Linkedin className="w-5 h-5" />
+               </a>
             </div>
           </div>
 
@@ -336,7 +420,7 @@ const App: React.FC = () => {
             <a href="#inicio" className="hover:text-blue-400 transition-colors">Inicio</a>
             <a href="#servicios" className="hover:text-blue-400 transition-colors">Servicios</a>
             <a href="#blog" className="hover:text-blue-400 transition-colors">Publicaciones</a>
-            <a href="https://linkedin.com" className="hover:text-blue-400 transition-colors">LinkedIn</a>
+            <a href="#" className="hover:text-blue-400 transition-colors">LinkedIn</a>
           </div>
           <div className="text-slate-600 text-[10px] font-bold tracking-[0.3em] pt-8">
             © {new Date().getFullYear()} CONSULTORÍA SENIOR DE INGENIERÍA & QA/QC.

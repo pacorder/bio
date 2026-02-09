@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,6 +16,20 @@
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
         }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+        @keyframes bounceShort {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .animate-bounce-short {
+            animation: bounceShort 2s infinite ease-in-out;
+        }
     </style>
 <script type="importmap">
 {
@@ -31,5 +44,7 @@
 </head>
 <body class="bg-white text-slate-900">
     <div id="root"></div>
+    <!-- CRITICAL: This script tag loads your application -->
+    <script type="module" src="index.tsx"></script>
 </body>
 </html>
